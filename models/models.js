@@ -32,33 +32,23 @@ var sequelize = new Sequelize(DB_name, user, pwd, {
 // Importar la definición de la tabla Quiz en quiz.js
 var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
 
+// Quiz.drop({});
+
 exports.Quiz = Quiz; // Exportar definición de tabla Quiz
 
 var binomios = [
-                {pregunta: 'Capital de Italia', respuesta: 'Roma'},
-                {pregunta: 'Capital de Portugal', respuesta: 'Lisboa'}
+                {pregunta: 'Capital de Italia', respuesta: 'Roma', tema: 'humanidades'},
+                {pregunta: 'Capital de Portugal', respuesta: 'Lisboa', tema: 'humanidades'}
                 ];
-
-var logCreate = function () {
-	console.log('Create con exito');
-};
 
 // sequelize.sync() crea e inicializa tabla de preguntas en DB
 sequelize.sync().then( function () {
-	// Quiz.drop({});
-	
-	// success(...) ejecuta el manejador una vez creada la tabla
-	Quiz.count().then( function (count) {
-		// la tabla se inicializa solo si está vacia
-		for (var indexBi in binomios) {
-			Quiz.findOrCreate({where: {pregunta: binomios[indexBi].pregunta}, defaults: {respuesta: binomios[indexBi].respuesta}})
-			  .spread(function(user, created) {
-			    console.log(user.get({
-			      plain: true
-			    }))
-			    console.log(created)
-			});
-		}
-		console.log('Base de datos inicializada');
-	});
+	// la tabla se inicializa solo si está vacia
+	for (var indexBi in binomios) {
+		Quiz.findOrCreate({where: {pregunta: binomios[indexBi].pregunta}, defaults: {respuesta: binomios[indexBi].respuesta, tema: binomios[indexBi].tema}})
+		  .spread(function(user, created) {
+		    console.log(user.get({ plain: true }))
+		});
+	}
+	console.log('Base de datos inicializada');
 });

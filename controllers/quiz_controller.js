@@ -33,7 +33,7 @@ exports.index = function(req, res) {
 	if (search) {
 		toSearch = true;
 		console.log('search=' + search);
-		models.Quiz.findAll({where:['pregunta like ?', '%' + search.replace(' ','%') + '%']}).then( goToIndex );
+		models.Quiz.findAll({where:['pregunta like ?', '%' + search.replace(' ','%') + '%'], order:'pregunta'}).then( goToIndex );
 	} else {	
 		models.Quiz.findAll().then( goToIndex );
 	}

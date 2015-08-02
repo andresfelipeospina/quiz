@@ -26,13 +26,10 @@ exports.index = function(req, res) {
 	console.log('index');
 	var queryData = url.parse(req.url, true).query;
 	var search = queryData.search;
-	var toSearch = false;
 	var goToIndex = function (quizes) {
-		var prefixEjs = toSearch ? 'search' : 'index';
-		res.render('quizes/' + prefixEjs + '.ejs', {quizes: quizes, errors: []});
+		res.render('quizes/index.ejs', {quizes: quizes, errors: []});
 	};	
 	if (search) {
-		toSearch = true;
 		console.log('search=' + search);
 		models.Quiz.findAll({where:['pregunta like ?', '%' + search.replace(' ','%') + '%'], order:'pregunta'}).then( goToIndex ).catch( function (error) { next(error) });
 	} else {	

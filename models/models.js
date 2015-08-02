@@ -49,19 +49,15 @@ sequelize.sync().then( function () {
 	
 	// success(...) ejecuta el manejador una vez creada la tabla
 	Quiz.count().then( function (count) {
-		if (count === 0) { // la tabla se inicializa solo si está vacia
-			Quiz.create( binomios[0]);
-			Quiz.create( binomios[1]).then(function () {
-				console.log('Base de datos inicializada');
-			});			
-		} else {			
-			for (var indexBi in binomios) {
-				Quiz.count({pregunta: binomios[indexBi].pregunta}).then( function (binomio) {
-					if (binomio === 0) {							
-						Quiz.create( binomios[indexBi] ).then(logCreate);
-					}
-				});
-			}
+		// la tabla se inicializa solo si está vacia
+		for (var indexBi in binomios) {
+			Quiz.findOrCreate({where: {pregunta: binomios[indexBi].pregunta}, defaults: {respuesta: binomios[indexBi].respuesta}})
+			  .spread(function(user, created) {
+			    console.log(user.get({
+			      plain: true
+			    }))
+			    console.log(created)
+			});
 		}
 		console.log('Base de datos inicializada');
 	});

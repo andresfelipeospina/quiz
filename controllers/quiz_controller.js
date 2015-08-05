@@ -9,7 +9,8 @@ var campos = ['pregunta', 'respuesta', 'tema'];
 // Autoload - factoriza el codigo si la ruta incluye :quizId
 exports.load = function (req, res, next, quizId) {
 	console.log('quizId=' + quizId);
-	models.Quiz.findById(quizId).then(
+	// models.Quiz.findById(quizId).then(
+	models.Quiz.find({where:{id: Number(quizId)}, include: [{model: models.Comment}]}).then(
 			function (quiz) {
 				if (quiz) {
 					req.quiz = quiz;

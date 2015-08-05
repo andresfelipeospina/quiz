@@ -30,11 +30,22 @@ var sequelize = new Sequelize(DB_name, user, pwd, {
 	});
 
 // Importar la definición de la tabla Quiz en quiz.js
-var Quiz = sequelize.import(path.join(__dirname, 'quiz'));
+var quizPath = path.join(__dirname, 'quiz');
+var Quiz = sequelize.import(quizPath);
+
+// Importar la definición de la tabla Quiz en comment.js
+var commentPath = path.join(__dirname, 'comment');
+var Comment = sequelize.import(commentPath);
 
 // Quiz.drop({});
+// Comment.drop({});
+
+// Relación entre tablas Quiz = 1 y Comment = N, relación 1 a N
+Comment.belongsTo(Quiz);
+Quiz.hasMany(Comment);
 
 exports.Quiz = Quiz; // Exportar definición de tabla Quiz
+exports.Comment = Comment; // Exportar definición de tabla Comment
 
 var binomios = [
                 {pregunta: 'Capital de Italia', respuesta: 'Roma', tema: 'humanidades'},

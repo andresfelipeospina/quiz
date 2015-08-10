@@ -33,6 +33,6 @@ exports.create = function (req, res) {
 
 // DELETE /logout -- Destruir sesión
 exports.destroy = function (req, res) {
-	delete.req.session.user;
+	delete req.session.user;
 	returnBeforeLogin(req, res);
 };

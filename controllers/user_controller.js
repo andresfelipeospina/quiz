@@ -10,10 +10,9 @@ var users = {
 // comprueba si el usuario está registrado en users
 // si autenticación falla o hay errores se ejecuta el callback(error).
 exports.autenticar = function (login, password, callback) {
-	var loginObj = users(login);
-	if (loginObj) {
-		if (password === loginObj.password) {
-			callback(null, loginObj);
+	if (users(login)) {
+		if (password === users(login).password) {
+			callback(null, users(login));
 		} else {
 			callback(new Error('Password erroneo.'));
 		}

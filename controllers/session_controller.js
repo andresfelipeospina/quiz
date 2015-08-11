@@ -6,7 +6,7 @@ var returnBeforeLogin = function (req, res) {
 	res.redirect(req.session.redir.toString()); // redirección a path anterior a login
 };
 
-// MW de auttorización de accesos HTTP restringidos
+// MW de autorización de accesos HTTP restringidos
 exports.loginRequired = function (req, res, next) {
 	if (req.session.user) {
 		next();

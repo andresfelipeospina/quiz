@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var methodOverride = require('method-override');
 var routes = require('./routes/index');
-//var users = require('./routes/users');
 var session = require('express-session');
 
 var app = express();
@@ -29,19 +28,45 @@ app.use(session());
 app.use(methodOverride('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
+// 2 minutos
+var timeOut = 2 * 60 * 1000;
+
+// función de control del tiempo de session
+var isTimeOutConnection = function (req) {
+	var timeNow = new Date().getTime();
+	console.log('Ultima conexion = ' + timeNow);
+	if (!req.session.lastConnectionSession) {
+		req.session.lastConnectionSession = timeNow;
+	}
+	var currentTime = timeNow - req.session.lastConnectionSession;
+	console.log('Diferencia conexion = ' + currentTime);
+	var isTimeOut = currentTime > timeOut;
+	req.session.lastConnectionSession = timeNow;
+	return isTimeOut;
+	
+};
+
 // Helpers dinamicos:
-app.use(function (req, res,next) {
+app.use(function (req, res, next) {
 	// guardar path en session.redir para después de login
 	if (!req.path.match(/\/login|\/logout/)) {
 		req.session.redir = req.path;
 	}
 	// Hacer visible req.session en las vistas
 	res.locals.session = req.session;
+	if (isTimeOutConnection(req) && req.session.user) {
+		delete req.session.user;
+		res.status(599);
+        res.render('error', {
+            message: 'Network connect timeout error',
+            error: {},
+            errors: []
+        });
+	}
 	next();
 });
 
 app.use('/', routes);
-//app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -1,0 +1,5 @@
+sudo mkdir certs
+cd certs
+sudo openssl genrsa -out quiz-2015-key.pem 2048
+sudo openssl req -new -sha256 -key quiz-2015-key.pem -out quiz-2015-key-csr.pem
+sudo openssl x509 -req -in quiz-2015-key-csr.pem -signkey quiz-2015-key.pem -out quiz-2015-cert.pem

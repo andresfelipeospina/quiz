@@ -35,7 +35,7 @@ exports.create = function (req, res) {
 			res.render('comments/new.ejs', {comment: comment, errors: err.errors});
 		} else {
 			// guarda en DB los campos texto de comment
-			quiz.save().then( function () {
+			comment.save().then( function () {
 				res.redirect('/quizes/' + quizIdParams);
 			}); // redirección HTTP (URL relativo) lista de preguntas
 		}	

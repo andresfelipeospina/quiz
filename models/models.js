@@ -38,7 +38,7 @@ var commentPath = path.join(__dirname, 'comment');
 var Comment = sequelize.import(commentPath);
 
 // Quiz.drop({});
- Comment.drop({});
+// Comment.drop({});
 
 // Relación entre tablas Quiz = 1 y Comment = N, relación 1 a N
 Comment.belongsTo(Quiz);
